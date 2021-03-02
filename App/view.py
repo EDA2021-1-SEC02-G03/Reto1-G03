@@ -33,26 +33,62 @@ Presenta el menu de opciones y por cada seleccion
 se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
-
+iniciando=True
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("2-Crear sublista y ordenarla")
+    print("0- Salir")
 
-catalog = None
 
+def initCatalog1():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalog1()
+def initCatalog2():
+    """
+    Inicializa el catalogo de libros
+    """
+    return controller.initCatalog2()
+def loadData(catalog):
+    """
+    Carga los libros en la estructura de datos
+    """
+    controller.loadData(catalog)
+def printBestVideos(videos):
+    size = lt.size(videos)
+    if size:
+        print(' Estos son los mejores libros: ')
+        for video in lt.iterator(videos):
+            print('Titulo: ' + video['title'] +  "Visitas: " + video['views'])
+    else:
+        print('No se encontraron libros')
+catalog=None
 """
 Menu principal
 """
-while True:
+while iniciando== True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
-        print("Cargando información de los archivos ....")
+        opcion= int (input("Seleccione la estructura que va a tener su lista:\n 1.Array_List o 2 u otro numero 1.Linked_List:\n"))
+        if opcion==1:
+           catalog = initCatalog1()
+        else:
+            catalog= initCatalog2()
+        print("Cargando información de los archivos ....")   
+        loadData(catalog)
+        print('Videos cargados: ' + str(lt.size(catalog['videos'])))
 
-    elif int(inputs[0]) == 2:
-        pass
+        print('Categorias cargados: ' + str(lt.size(catalog['categorys'])))
+        True
+    if int(inputs[0]) == 2:
 
-    else:
-        sys.exit(0)
-sys.exit(0)
+            num=int(input("Porfavor ingrese el tamaño de la sublista:\n"))
+            print("Ingrese la opcion con la que se desea organizar la lista")
+            opcion_sort=int(input("1.Selection  2.Insertion  3.Shell:\n"))
+            result=controller.getBestVideos(catalog,num,opcion_sort)
+            print("Para la muestra de", num, " elementos, el tiempo (mseg) es: ",
+                                          str(result[0]))
+
