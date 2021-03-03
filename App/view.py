@@ -87,8 +87,11 @@ while iniciando== True:
 
             num=int(input("Porfavor ingrese el tamaño de la sublista:\n"))
             print("Ingrese la opcion con la que se desea organizar la lista")
-            opcion_sort=int(input("1.Selection  2.Insertion  3.Shell:\n"))
-            result=controller.getBestVideos(catalog,num,opcion_sort)
-            print("Para la muestra de", num, " elementos, el tiempo (mseg) es: ",
+            opcion_sort=int(input("1.Selection 2.Insertion 3.Shell 4.Merge 5.Quick\n"))
+            if 6>opcion_sort>0:
+               result=controller.getBestVideos(catalog,num,opcion_sort)
+               print("Para la muestra de", num, " elementos, el tiempo (mseg) es: ",
                                           str(result[0]))
-
+            else:print("Ingrese una opcion valida")
+    if int(inputs[0])==0:
+        iniciando=False

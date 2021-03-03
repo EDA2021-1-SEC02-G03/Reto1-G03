@@ -1,33 +1,8 @@
-﻿"""
- * Copyright 2020, Departamento de sistemas y Computación,
- * Universidad de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * Contribuciones:
- *
- * Dario Correal - Version inicial
- """
-
-
-import config as cf
+﻿import config as cf
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import quicksort as qs
+from DISClib.Algorithms.Sorting import mergesort as ms
 assert cf
 import time
 
@@ -137,7 +112,11 @@ def getBestVideos(catalog,num,opcionsort):
     sub_list=lt.subList(catalog['videos'], 1, num)
     sub_list=sub_list.copy()
     start_time = time.process_time()
-    if opcionsort==1:
+    if opcionsort==4:
+        nsblista=ms.mergesort(sub_list,cmpVideosByViews)
+    elif opcionsort==5:
+        nsblista=qs.quicksortf(sub_list,cmpVideosByViews)
+    elif opcionsort==1:
         nsblista=sortselect(sub_list,cmpVideosByViews)
     elif opcionsort==2:
         nsblista=sortinsert(sub_list,cmpVideosByViews)

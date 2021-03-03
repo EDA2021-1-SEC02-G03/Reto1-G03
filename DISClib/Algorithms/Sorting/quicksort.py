@@ -66,6 +66,42 @@ def quicksort(lst, lo, hi, cmpfunction):
     quicksort(lst, pivot+1, hi, cmpfunction)
 
 
+def quicksortf(lst, cmpfunction):
+    quicksort(lst, 1, lt.size(lst), cmpfunction)
+    return lst
+
+
+
+def partition(lst, lo, hi, cmpfunction):
+    """
+    Función que va dejando el pivot en su lugar, mientras mueve
+    elementos menores a la izquierda del pivot y elementos mayores a
+    la derecha del pivot
+    """
+    follower = leader = lo
+    while leader < hi:
+        if cmpfunction(
+           lt.getElement(lst, leader), lt.getElement(lst, hi)):
+            lt.exchange(lst, follower, leader)
+            follower += 1
+        leader += 1
+    lt.exchange(lst, follower, hi)
+    return follower
+
+
+def quicksort(lst, lo, hi, cmpfunction):
+    """
+    Se localiza el pivot, utilizando la funcion de particion.
+    Luego se hace la recursión con los elementos a la izquierda del pivot
+    y los elementos a la derecha del pivot
+    """
+    if (lo >= hi):
+        return
+    pivot = partition(lst, lo, hi, cmpfunction)
+    quicksort(lst, lo, pivot-1, cmpfunction)
+    quicksort(lst, pivot+1, hi, cmpfunction)
+
+
 def sort(lst, cmpfunction):
     quicksort(lst, 1, lt.size(lst), cmpfunction)
     return lst
