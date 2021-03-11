@@ -1,11 +1,10 @@
-﻿import config as cf
-from DISClib.ADT import list as lt
+﻿from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import quicksort as qs
 from DISClib.Algorithms.Sorting import mergesort as ms
-assert cf
+from DISClib.DataStructures import arraylist as array
+from datetime import datetime, timedelta
 import time
-
 """
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
@@ -21,7 +20,7 @@ def newCatalog1():
     """
     catalog = {'videos': None,
                'authors': None,
-               'category': None}
+               'categorys': None}
 
     catalog['videos'] = lt.newList('ARRAY_LIST')
     catalog['categorys'] = lt.newList('ARRAY_LIST',
@@ -37,10 +36,10 @@ def newCatalog2():
     """
     catalog = {'videos': None,
                'authors': None,
-               'category': None}
+               'categorys': None}
 
     catalog['videos'] = lt.newList("SINGLE_LINKED")
-    catalog['categorys'] = lt.newList("SINGLE_LINKED",
+    catalog['category'] = lt.newList("SINGLE_LINKED",
                                  cmpfunction=comparetagnames)
 
     return catalog
@@ -72,8 +71,7 @@ def addCategory(catalog, category):
     """
     Adiciona un tag a la lista de tags
     """
-    t = newCategory(category['id'], category['name'])
-    lt.addLast(catalog['categorys'], t)
+    lt.addLast(catalog['categorys'], category)
 
 # Funciones para creacion de datos
 def newAuthor(name):
@@ -139,9 +137,16 @@ def cmpVideosByViews(video1, video2):
     visitas1=video1["views"]
     visitas2=video2["views"]
     if visitas1<visitas2:
-        return True
-    else:
         return False
+    else:
+        return True
+def cmpVideosByTrendingdate(video1, video2):
+    fecha1=video1["trending_date"]
+    fecha2=video2["trending_date"]
+    if fecha1<fecha2:
+        return False
+    else:
+        return True
 # Funciones de ordenamiento
 def sortBooks(catalog):
     sa.sort(catalog['videos'], compareratings)
@@ -185,3 +190,71 @@ def sortshell(lst, cmpfunction):
                 j -= h
         h //= 3    # h se decrementa en un tercio
     return lst
+def getfirst(catalog):
+    elemento=array.firstElement(catalog["videos"])
+    return elemento
+def listcategory(catalog,category):
+    listacat= lt.newList('ARRAY_LIST')
+    videos=catalog["videos"]
+    for video in lt.iterator(videos):
+        if video["category_id"]==category:
+            lt.addLast(listacat, video)
+    return listacat
+def listpais1(catalog,pais):
+    listacat= lt.newList('ARRAY_LIST')
+    videos=catalog["videos"]
+    for video in lt.iterator(videos):
+        if video["country"] == pais:
+            lt.addLast(listacat, video)
+    return listacat
+def listpais2(lista,pais):
+    listacat= lt.newList('ARRAY_LIST')
+    for video in lt.iterator(lista):
+        if video["country"] == pais:
+            lt.addLast(listacat, video)
+    return listacat
+def categoryid(catalog,category_name):
+    categorys=catalog["categorys"]
+    for category in lt.iterator(categorys):
+        if category["name"] ==category_name:
+            cid=category["id"]
+            break
+    return cid
+def diastrending(lista):
+    for i in range(1,lt.size(lista)):
+        posvid1=i
+        posvid2=i+1
+        video1=lt.getElement(lista,posvid1)
+        video2=lt.getElement(lista,posvid2)
+        fechacad1=video1["trending_date"]
+        fechacad2=video2["trending_date"]
+        fecha1=time.strptime(fechacad1, '%y.%d.%m')
+        fecha2 = time.strptime(fechacad2, '%y.%d.%m')
+        fecha1=fecha1[0]+2000+ fecha1[1]+fecha1[2]
+        fecha2=fecha2[0]+2000+fecha2[1]+fecha2[2]
+        diastrend =fecha2-fecha1
+        masdiastrend=0
+        video=None
+        if diastrend>=masdiastrend:
+            video=video1
+            masdiastrend=diastrend
+    return video,masdiastrend
+def topvideoscategoriapais(catalog,categoria,pais,tamaño):
+    categoria_id=categoryid(catalog,categoria)
+    listacategoria=listcategory(catalog,categoria_id)
+    listapais=listpais2(listacategoria,pais)
+    listaordenada=sortshell(listapais,cmpVideosByViews)
+    sub_list=lt.subList(listaordenada, 1,tamaño)
+    return sub_list
+def toptrendingdatepais(catalog,pais):
+    listapais=listpais1(catalog,pais)
+    listaordenada=sortshell(listapais,cmpVideosByTrendingdate)
+    video=diastrending(listaordenada)
+    return video
+def listatag(catalog,tag):
+    listacat= lt.newList('ARRAY_LIST')
+    videos=catalog["videos"]
+    for video in lt.iterator(videos):
+        if video["tags"] == tag:
+            lt.addLast(listacat, video)
+    return listacat
